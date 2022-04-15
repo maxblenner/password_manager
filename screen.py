@@ -29,4 +29,7 @@ class userAccount(object):
         
         file = open("userData.txt", "r")
         return self._name,  file.read().strip("\n")
-      
+ 
+# to put the dic into file uncomment this 2 line
+#sample = userAccount()
+#sample.userData()

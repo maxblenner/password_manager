@@ -17,15 +17,13 @@ db= dict(ChainMap
            for row in cur.fetchall()] 
           )
          ) 
-name = "admin"
-password = "admin"
-msg = "fail"
+
 #db = {"admin": "admin", "asd": "asd"}
 
 
 
 
-def addUser(name, password):
+def addUser(name, password,u_email):
     if name in db:
         print("The username already exists! \nPlease try again")
         createUser()
@@ -33,15 +31,15 @@ def addUser(name, password):
     else:
         if isinstance(name, str):
             #STORE VALUES TO DATABASE
-            #query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ password +"','"+ u_email +"')"
-            #addAcc(name,pw,u_email)
-            db[name] = password
-            print(db)
+            query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ password +"','"+ u_email +"')"
+            addAcc(name,password,u_email,query)
+            #db[name] = password
+            
 
 def createUser():
      name = input("Enter a username: ")
      password = input("Enter a password: ")
-     addUser(name, password)
+     addUser(name, password,u_email)
 
 def userScreen(msg, user):
     if msg == "Success":
@@ -61,6 +59,10 @@ def userScreen(msg, user):
 
 # print(db)
 
+name = input("Please enter the Username : ")
+password = input("Please enter the master password : ")
+u_email = input("Please enter user email : ")
+msg = "fail"
 
 if isinstance(name, str):
     if name in db:
