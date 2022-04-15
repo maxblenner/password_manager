@@ -1,17 +1,29 @@
 #import database as db
 #import fetch file
+import itertools
 from screen import userAccount
-# name = input("Enter Username: ")
-# password = input("Enter Password: ")
+from database_manager import addAcc, connectDatabase
+from collections import ChainMap
 
-
-
-
+#database connection (use cur to manipulate)
+conn= connectDatabase()
+cur = conn.cursor()
+cur.execute("SELECT * FROM account")
+desc= cur.description
+column_names = [col[0] for col in desc]
+db= dict(ChainMap
+         (*
+          [dict(zip(column_names, row))  
+           for row in cur.fetchall()] 
+          )
+         ) 
 name = "admin"
 password = "admin"
 msg = "fail"
+#db = {"admin": "admin", "asd": "asd"}
 
-db = {"admin": "admin", "asd": "asd"}
+
+
 
 def addUser(name, password):
     if name in db:
@@ -21,6 +33,8 @@ def addUser(name, password):
     else:
         if isinstance(name, str):
             #STORE VALUES TO DATABASE
+            #query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ password +"','"+ u_email +"')"
+            #addAcc(name,pw,u_email)
             db[name] = password
             print(db)
 
@@ -46,6 +60,8 @@ def userScreen(msg, user):
             print("No data")
 
 # print(db)
+
+
 if isinstance(name, str):
     if name in db:
         print("ok")

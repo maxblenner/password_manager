@@ -15,14 +15,14 @@ def connectDatabase():
     except (Exception, pyodbc.Error):
             print('Unable to connect to database')
 
-def addAcc(name,mpw,email):  
+def addAcc(u_name,u_pw,u_email,query):  
         conn= connectDatabase()       
         if(conn != None):
             cur = conn.cursor()            
-            cur.execute
+            cur.execute(query)
             cur.commit()      
      
-def storePass(u_mail,app_email,apw,app_name,app_url):
+def storePass(u_mail,app_email,app_pw,app_name,app_url):
         conn = connectDatabase()
         if(conn != None):
             cur = conn.cursor()
@@ -34,39 +34,33 @@ def storePass(u_mail,app_email,apw,app_name,app_url):
                         IF NOT EXISTS (SELECT * FROM password 
                         WHERE App_name= '""" + app_name + """' AND App_email= '""" + app_email +"""') 
                         INSERT INTO password (App_email,App_pass,App_name,App_url,AccountID) 
-                        values('"""+ app_email +"""','"""+ apw +"""','"""+app_name+"""','"""+app_url+"""','"""+acc_id+"""')
+                        values('"""+ app_email +"""','"""+ app_pw +"""','"""+app_name+"""','"""+app_url+"""','"""+acc_id+"""')
                         """)
             cur.commit()      
      
-def findData():
+def findData(u_email):
     conn = connectDatabase()
     cur = conn.cursor()
-    name = input()
-    cur.execute("SELECT * FROM account WHERE fname = '"+ name +"' ")
-    user=cur.fetchall()
-    print(user)
-
-
-def deleteData():
-    conn = connectDatabase()
-    cur = conn.cursor()
-    fname = input()
-    lname = input()
-    cur.execute("DELETE FROM account WHERE fname = '" + fname + "' AND lname = '" + lname + "' ")
-
-def createTable():    
-
-    #data_type= input('Data type:')
-    
-    conn = connectDatabase()
-    cur = conn.cursor()
-    #cur.execute( """IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='link' AND xtype='U') CREATE TABLE link (pid tinyint,url varchar(20))""") #IF EXISTS statement to check if the table is already in database.  
-    cur.execute("""Create TABLE pass (pid varchar(MAX),url varchar(MAX))""")
-    #cur.execute("Create TABLE account (fname nvarchar(50),lname nvarchar(50))")
-    conn.commit()
+    cur.execute("SELECT * FROM account WHERE App_email = '" + u_email +"'")
+    cur.fetchall()
     
 
+    #name = input()
+    #cur.execute("SELECT * FROM account WHERE Acc_Name = '"+ name +"' ")
+    #user=cur.fetchall()
+    #print(user[1])
 
+
+def deleteData(u_name, u_email):
+    conn = connectDatabase()
+    cur = conn.cursor()
+    
+    cur.execute("DELETE FROM account WHERE Acc_name = '" + u_name + "' AND lname = '" + u_email + "' ")
+
+
+
+
+  
 
 #connectDatabase()
 #addData()
