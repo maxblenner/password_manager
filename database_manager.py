@@ -15,7 +15,17 @@ def connectDatabase():
     except (Exception, pyodbc.Error):
             print('Unable to connect to database')
 
-def addAcc(u_name,u_pw,u_email,query):  
+def pullData():
+    conn=connectDatabase()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM account")
+    desc= cur.description
+    column_names = [col[0] for col in desc]
+    db= [dict(zip(column_names, row))  
+            for row in cur.fetchall()]
+    return db
+
+def addAcc(query):  
         conn= connectDatabase()       
         if(conn != None):
             cur = conn.cursor()            
@@ -39,11 +49,11 @@ def storePass(u_mail,app_email,app_pw,app_name,app_url):
                         """)
             cur.commit()      
      
-def findData(u_email):
+def findData(userID):
     conn = connectDatabase()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM account WHERE App_email = '" + u_email +"'")
-    cur.fetchall()
+    cur.execute("SELECT * FROM password WHERE AccountID = '" + userID +"'")
+    return cur.fetchall()
     
 
     #name = input()
@@ -52,18 +62,18 @@ def findData(u_email):
     #print(user[1])
 
 
-def deleteData(u_name, u_email):
+def deleteData(userID, app_email,app_name):
     conn = connectDatabase()
-    cur = conn.cursor()
-    
-    cur.execute("DELETE FROM account WHERE Acc_name = '" + u_name + "' AND lname = '" + u_email + "' ")
+    cur = conn.cursor()    
+    cur.execute("DELETE FROM password WHERE AccountID = '" + str(userID) + "' AND  App_name = '" + app_name + "' AND App_email = '" + app_email + "' ")
+    cur.commit()
 
 
-
-
-name = "admin"
-pw = "admin" 
-u_email = "adm@gmail.com"
-query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ pw +"','"+ u_email +"')"
-addAcc(name,pw,u_email,query)
+#print(findData(str(2)))
+#name = "furkan"
+#pw = "furkan" 
+#u_email = "furkan@gmail.com"
+#query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ pw +"','"+ u_email +"')"
+#addAcc(name,pw,u_email,query)
 #storePass(u_email,'admin@gmail.com','12345','admin','admin.com')
+#deleteData(3,'facebook','face')

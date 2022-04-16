@@ -6,13 +6,7 @@ from database_manager import connectDatabase
 from collections import ChainMap
 import itertools
 
-conn= connectDatabase()
-cur = conn.cursor()
-cur.execute("SELECT * FROM account")
-desc= cur.description
-column_names = [col[0] for col in desc]
-db= dict(ChainMap(*[dict(zip(column_names, row))  
-            for row in cur.fetchall()] ))
+
 
 w=Tk()
 w.geometry('320x320')
