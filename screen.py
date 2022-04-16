@@ -24,12 +24,14 @@ class userAccount(object):
         db= dict(ChainMap(*[dict(zip(column_names, row))  
                     for row in cur.fetchall()] ))        
         with open("userData.txt", 'a') as f:                    
+        
+        with open("userData.txt", 'w') as f:                    
                         for key, value in db.items(): 
                             f.write('%s:%s;' % (key, value))
         
         file = open("userData.txt", "r")
         return self._name,  file.read().strip("\n")
  
-# to put the dic into file uncomment this 2 line
-#sample = userAccount()
-#sample.userData()
+#to put the dic into file uncomment this 2 line
+sample = userAccount()
+sample.userData()
