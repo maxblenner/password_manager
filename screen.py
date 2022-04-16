@@ -9,9 +9,9 @@ from collections import ChainMap
 class userAccount(object):
     """docstring for userAccount."""
 
-    def __init__(self, name=None, password=None):
+    def __init__(self, id=None, password=None):
         super(userAccount, self).__init__()
-        self._name = name
+        self._name = id
         self._password = password
 
     def userData(self):
@@ -21,17 +21,10 @@ class userAccount(object):
         cur.execute("SELECT * FROM account")
         desc= cur.description
         column_names = [col[0] for col in desc]
-        db= dict(ChainMap(*[dict(zip(column_names, row))  
-                    for row in cur.fetchall()] ))        
-        with open("userData.txt", 'a') as f:                    
+        db= [dict(zip(column_names, row))  
+                for row in cur.fetchall()] 
         
-        with open("userData.txt", 'w') as f:                    
-                        for key, value in db.items(): 
-                            f.write('%s:%s;' % (key, value))
-        
-        file = open("userData.txt", "r")
-        return self._name,  file.read().strip("\n")
+        return self._name, db
  
-#to put the dic into file uncomment this 2 line
-sample = userAccount()
-sample.userData()
+
+

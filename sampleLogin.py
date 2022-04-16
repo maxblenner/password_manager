@@ -7,19 +7,29 @@ def validateLogin(username, password):
 	return
 
 tkWindow = Tk()
-tkWindow.geometry('800x300')
 tkWindow.title('Login For SMF')
+tkWindow.geometry('320x320')
 
-usernameLabel = Label(tkWindow, text="User Name").grid(row=0, column=0)
+bg = PhotoImage(file="bg/11.png")
+
+my_canvas = Canvas(tkWindow, width=320, height=320 )
+my_canvas.pack(fill="both", expand=True)
+
+my_canvas.create_image(0,0, image=bg, anchor="nw")
+
+my_canvas.create_text(200,200,text="Password Manager")
+
+
+usernameLabel = Label(tkWindow, text="User Name")
 username = StringVar()
-usernameEntry = Entry(tkWindow, textvariable=username).grid(row=0, column=1)
+usernameEntry = Entry(tkWindow, textvariable=username)
 
-passwordLabel = Label(tkWindow,text="Password").grid(row=1, column=0)
+passwordLabel = Label(tkWindow,text="Password")
 password = StringVar()
-passwordEntry = Entry(tkWindow, textvariable=password, show='*').grid(row=1, column=1)
+passwordEntry = Entry(tkWindow, textvariable=password, show='*')
 
 validateLogin = partial(validateLogin, username, password)
 
-loginButton = Button(tkWindow, text="Login", command=validateLogin).grid(row=4, column=0)
+loginButton = Button(tkWindow, text="Login", command=validateLogin)
 
 tkWindow.mainloop()

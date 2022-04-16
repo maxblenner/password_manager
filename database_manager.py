@@ -61,9 +61,9 @@ def deleteData(u_name, u_email):
 
 
 
-name = "test"
-pw = "test" 
-u_email = "testing@gmail.com"
+name = "admin"
+pw = "admin" 
+u_email = "adm@gmail.com"
 query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ pw +"','"+ u_email +"')"
-#addAcc(name,pw,u_email,query)
-storePass(u_email,'test@gmail.com','12345','test','test.com')
+addAcc(name,pw,u_email,query)
+#storePass(u_email,'admin@gmail.com','12345','admin','admin.com')

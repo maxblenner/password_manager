@@ -11,20 +11,18 @@ cur = conn.cursor()
 cur.execute("SELECT * FROM account")
 desc= cur.description
 column_names = [col[0] for col in desc]
-db= dict(ChainMap
-         (*
-          [dict(zip(column_names, row))  
-           for row in cur.fetchall()] 
-          )
-         ) 
+db=[dict(zip(column_names, row))  
+    for row in cur.fetchall()] 
+        
+#print(db)
 
-#db = {"admin": "admin", "asd": "asd"}
 
 
 
 
 def addUser(name, password,u_email):
-    if name in db:
+    #print()
+    if name == db.get('Acc_name'):
         print("The username already exists! \nPlease try again")
         createUser()
 
@@ -34,6 +32,10 @@ def addUser(name, password,u_email):
             query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ password +"','"+ u_email +"')"
             addAcc(name,password,u_email,query)
             #db[name] = password
+
+
+
+    
             
 
 def createUser():
@@ -43,39 +45,41 @@ def createUser():
 
 def userScreen(msg, user):
     if msg == "Success":
-        sample = userAccount(name=user)
-        username, data = sample.userData()
-        print(f"Welcome {username}")
-        data = data.split(";")
+        sample = userAccount(id = user)
+        username,data = sample.userData()
+        
+        print(f"Welcome {username}")       
         if data:
-            # print(data)
-            for i in data:
-                i = i.split(":")
-                for a in i:
-                    print(a, end="  ")
-                print()
+            print(data)
         else:
             print("No data")
 
-# print(db)
 
-name = input("Please enter the Username : ")
-password = input("Please enter the master password : ")
-u_email = input("Please enter user email : ")
+
+#name = input("Please enter the Username : ")
+#password = input("Please enter the master password : ")
+#u_email = input("Please enter user email : ")
+name = 'Shakti'
+password = 'Sikka'
+u_email = 'shakti.sikka@gmail.com'
 msg = "fail"
 
 if isinstance(name, str):
-    if name in db:
-        print("ok")
-        if db[name] == password:
-            msg = "Success"
-            print("Login Successful...")
-            userScreen(msg, name)
-        else:
-            print("Incorrect Password")
+    for dic in db:
+        for key in dic:
+            #print(key)
+            if dic[key] == name:
+                print("ok")               
+                if  password == dic['Acc_pw'].strip():
+                    msg = "Success"
+                    print("Login Successful...")
+                    userScreen(msg, dic['AccountID'])
+                    break;
+                else:
+                    print("Incorrect Password")
 
-    else:
-        print("User Does not Exist! Please create new user below: ")
-        createUser()
+            #else:
+            #    print("User Does not Exist! Please create new user below: ")
+            #    createUser()
 else:
     print("That doesn't look like a Username! Please restart...")
