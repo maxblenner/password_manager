@@ -1,6 +1,20 @@
 from cryptography.fernet import Fernet
 
+<<<<<<< Updated upstream
 def create_key():
+=======
+
+directory = "C:\\Users\\furka\\Desktop\\Keyfiles\\"
+
+def create_key(filename):    
+    #path = input("Put path: ")
+    #os.mkdir(path)
+   
+
+    # get fileName from user
+    filepath = directory + filename + '.txt'
+
+>>>>>>> Stashed changes
     key = Fernet.generate_key()
     with open("userKey.txt", 'wb') as f:
         f.write(key)
