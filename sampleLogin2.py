@@ -1,10 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
-import tkinter
 from PIL import ImageTk,Image
-from database_manager import connectDatabase
-from collections import ChainMap
-import itertools
+import os
+import mainloginpage as ml
 
 
 
@@ -52,41 +50,72 @@ l2.place(x=120,y=145)
 
 #Command
 def cmd():
-    if e1.get()=='admin' and e2.get()=='admin':
-        messagebox.showinfo("LOGIN SUCCESSFULLY", "         W E L C O M E        ")
-        q= Toplevel()     
-        q.geometry('700x700')
-        q.title('SMF Password Manager')
-        q.resizable(0,0)
+    name = e1.get()
+    mpw = e2.get()
+    ml.userLogin(name,mpw)
+    #popWindow(name)
+    #userLogin(name,mpw)
+    #if e1.get()=='admin' and e2.get()=='admin':
+    #    messagebox.showinfo("LOGIN SUCCESSFULLY", "         W E L C O M E        ")
+    #    q= Toplevel()     
+    #    q.geometry('700x700')
+    #    q.title('SMF Password Manager')
+    #    q.resizable(0,0)
         
 
-        imagec=Image.open("bg/23.png")
-        imaged= ImageTk.PhotoImage(imagec)
+    #    imagec=Image.open("bg/23.png")
+    #    imaged= ImageTk.PhotoImage(imagec)
 
-        label5 = Label(q,image=imaged,
-                       border=0,
+    #    label5 = Label(q,image=imaged,
+    #                   border=0,
                
-                       justify=CENTER)
+    #                   justify=CENTER)
 
 
-        label5.place(x=0, y=0)
-        q.mainloop()
+    #    label5.place(x=0, y=0)
+    #    q.mainloop()
         
-    else:
-        messagebox.showwarning("LOGIN FAILED","        PLEASE TRY AGAIN        ")
+    #else:
+    #    messagebox.showwarning("LOGIN FAILED","        PLEASE TRY AGAIN        ")
+
+def popWindow(username,status,msg):
+   status="LOGIN FAILED"
+   msg = "         You don\'t have an account      "
+   messagebox.showinfo(status, msg)
+   #messagebox.showinfo("LOGIN SUCCESSFULLY", "         W E L C O M E  '"+username+"'      ")
+   #messagebox.showinfo("LOGIN FAILED", "         You don\'t have an account      ")
+   #pop= Toplevel(w)
+   #pop.geometry("250x250")
+   #pop.title("")
+   #Label(pop, text= "Welcome", font=('Arial',10)).place(x=90,y=20)
+   #Label(pop, text= "You don't have an account", font=('Arial',10)).place(x=25,y=50)
+   #pop.after(2000,lambda:pop.destroy())
+
+
+
+
+
 
 
 #Button_with hover effect
-def bttn(x,y,text,ecolor,lcolor):
+def bttn(x,y,ecolor,lcolor):
     def on_entera(e):
         myButton1['background'] = ecolor #ffcc66
         myButton1['foreground']= lcolor  #000d33
-
     def on_leavea(e):
         myButton1['background'] = lcolor
         myButton1['foreground']= ecolor
 
-    myButton1 = Button(w,text=text,
+    myButton1 = Button(w,text='L O G I N',
+                   width=19,
+                   height=2,
+                   fg=ecolor,
+                   border=0,
+                   bg=lcolor,
+                   activeforeground=lcolor,
+                   activebackground=ecolor,
+                       command=cmd)
+    myButton2 = Button(w,text='Register',
                    width=19,
                    height=2,
                    fg=ecolor,
@@ -98,11 +127,14 @@ def bttn(x,y,text,ecolor,lcolor):
                   
     myButton1.bind("<Enter>", on_entera)
     myButton1.bind("<Leave>", on_leavea)
+    
 
     myButton1.place(x=x,y=y)
+    myButton2.place(x=90,y=290)
+
+bttn(90,250,'white','#075064')
 
 
-bttn(90,250,'L O G I N','white','#075064')
 
 
 w.mainloop()

@@ -3,13 +3,13 @@ from cryptography.fernet import Fernet
 
 directory = "C:\\Users\\furka\\Desktop\\"
 
-def create_key():    
+def create_key(filename):    
     #path = input("Put path: ")
     #os.mkdir(path)
    
 
     # get fileName from user
-    filepath = directory + input("Enter a filename: ") + '.txt'
+    filepath = directory + filename + '.txt'
 
     key = Fernet.generate_key()
 
