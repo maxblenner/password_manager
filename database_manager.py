@@ -72,10 +72,10 @@ def findData(userID):
     cur.execute("SELECT * FROM password WHERE AccountID = '" + str(userID) +"'")
     return cur.fetchall()
 
-def fetchPassword(app_name,acc_id):
+def fetchPassword(acc_id):
     conn = connectDatabase()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM password WHERE App_name = '" + app_name +"' AND AccountID = '"+ str(acc_id) +"'")
+    cur.execute("SELECT * FROM password AccountID = '"+ str(acc_id) +"'")
     return cur.fetchall()
 
     #name = input()

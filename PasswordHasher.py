@@ -1,15 +1,16 @@
 from cryptography.fernet import Fernet
 
 
-directory = "C:\\Users\\furka\\Desktop\\"
+#directory = "C:\\Users\\furka\\Desktop\\Keyfiles\\"
 
-def create_key():    
+def create_key(filename):    
     #path = input("Put path: ")
     #os.mkdir(path)
    
 
     # get fileName from user
-    filepath = directory + input("Enter a filename: ") + '.txt'
+    filepath = filename
+    
 
     key = Fernet.generate_key()
 
@@ -18,10 +19,10 @@ def create_key():
         f.write(key)
 
     
-def load_key():
+def load_key(key_file):    
     try:
-        filename =  input("Enter a filename without extensions: ") + '.txt' 
-        with open(directory+filename, 'rb') as f:
+        filename =  key_file 
+        with open(filename, 'rb') as f:
             key = f.read()
             return key
     except: 
@@ -34,8 +35,8 @@ def encrypt_password(password):
     encrypted = f.encrypt(password)
     return(encrypted)
 
-def decrypt_password(encrypted_pw):
-    key = load_key()    
+def decrypt_password(encrypted_pw,key_file):
+    key = load_key(key_file)   
     f = Fernet(key)
     decrypted = f.decrypt(encrypted_pw)
     return decrypted.decode('ascii')
