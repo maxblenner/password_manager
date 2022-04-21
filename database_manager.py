@@ -15,55 +15,86 @@ def connectDatabase():
     except (Exception, pyodbc.Error):
             print('Unable to connect to database')
 
-def addAcc(u_name,u_pw,u_email,query):  
+def fetchAccounts():
+    conn=connectDatabase()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM account ")
+    desc= cur.description
+    column_names = [col[0] for col in desc]
+    db= [dict(zip(column_names, row))  
+            for row in cur.fetchall()]
+    return db
+
+
+
+#fetching unique user from database
+def fetchSingleAccount():
+    conn=connectDatabase()
+    cur = conn.cursor()
+    cur.execute("SELECT AccountID FROM account ")
+    desc= cur.description
+    column_names = [col[0] for col in desc]
+    db= [dict(zip(column_names, row))  
+            for row in cur.fetchall()]
+    return db
+
+#fetching single data with given query
+def fetchSingleData(query):
+    conn= connectDatabase()
+    cur = conn.cursor()
+    cur.execute(query)
+    return cur.fetchone()
+
+#adding accounts to the database
+def addAcc(query):  
         conn= connectDatabase()       
         if(conn != None):
             cur = conn.cursor()            
             cur.execute(query)
             cur.commit()      
-     
-def storePass(u_mail,app_email,app_pw,app_name,app_url):
+#store user password according to userID    
+def storeData(userID,app_email,app_pw,app_name,app_url):
         conn = connectDatabase()
         if(conn != None):
-            cur = conn.cursor()            
-            cur.execute("""
-                            (SELECT AccountID from account 
-                            WHERE Acc_email = '""" + u_mail + """')   
-                       """)
-            acc_id = cur.fetchone()
+            cur = conn.cursor()
             cur.execute("""
                         IF NOT EXISTS (SELECT * FROM password 
                         WHERE App_name= '""" + app_name + """' AND App_email= '""" + app_email +"""') 
                         INSERT INTO password (App_email,App_pass,App_name,App_url,AccountID) 
-                        values('"""+ app_email +"""','"""+ app_pw +"""','"""+app_name+"""','"""+app_url+"""','"""+str(acc_id[0])+"""')
+                        values('"""+ app_email +"""','"""+ app_pw +"""','"""+app_name+"""','"""+app_url+"""','"""+str(userID)+"""')
                         """)
             cur.commit()      
-     
-def findData(u_email):
+def updateData(passID,app_email,app_pw,app_name,app_url):
+    conn = connectDatabase()
+    if(conn != None):
+            cur = conn.cursor()           
+            cur.execute("UPDATE password SET App_email = '"+ app_email +"', App_pass = '"+ app_pw +"', App_name = '"+ app_name +"', App_url = '"+ app_url +"' WHERE PassID = '"+str(passID[0])+"'")
+                        
+            cur.commit()      
+
+def deleteData(passID):
+    conn = connectDatabase()
+    if(conn != None):
+            cur = conn.cursor()           
+            cur.execute("DELETE FROM password WHERE PassID = '"+str(passID[0])+"'")
+            cur.commit()      
+
+  
+def findData(userID):
     conn = connectDatabase()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM account WHERE App_email = '" + u_email +"'")
-    cur.fetchall()
-    
+    cur.execute("SELECT * FROM password WHERE AccountID = '" + str(userID) +"'")
+    return cur.fetchall()
 
-    #name = input()
-    #cur.execute("SELECT * FROM account WHERE Acc_Name = '"+ name +"' ")
-    #user=cur.fetchall()
-    #print(user[1])
-
-
-def deleteData(u_name, u_email):
+def fetchPassID(userID,userName):
     conn = connectDatabase()
     cur = conn.cursor()
-    
-    cur.execute("DELETE FROM account WHERE Acc_name = '" + u_name + "' AND lname = '" + u_email + "' ")
+    cur.execute("SELECT PassID FROM password WHERE AccountID = '"+ str(userID) +"' AND App_email = '"+ userName +"' ")
+    return cur.fetchone()
 
-
-
-
-name = "test"
-pw = "test" 
-u_email = "testing@gmail.com"
-query="INSERT INTO account (Acc_name,Acc_pw,Acc_email) values('"+ name +"','"+ pw +"','"+ u_email +"')"
-#addAcc(name,pw,u_email,query)
-storePass(u_email,'test@gmail.com','12345','test','test.com')
+def fetchuserName(passID,prevName):
+    conn = connectDatabase()
+    cur = conn.cursor()
+    cur.execute("SELECT App_email FROM password WHERE App_email = '"+ prevName +"' AND PassID = '"+ str(passID[0][0]) +"' ")
+    return cur.fetchone()
+   
